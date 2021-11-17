@@ -71,10 +71,9 @@ Led ledsOk[] = {Led(8), Led(9)};
 Led leds1[] = {Led(10), Led(11)};
 Led leds2[] = {Led(12), Led(13)};
 
-const unsigned long eventInterval = 1000;
 unsigned long previousTime = 0;
-const unsigned long eventInterval2 = 2000;
 unsigned long previousTime2 = 0;
+unsigned long previousTime3 = 0;
 
 bool vlak = false;
 bool gate = true;
@@ -110,6 +109,7 @@ void loop()
 {
   unsigned long currentTime = millis();
   unsigned long currentTime2 = millis();
+  unsigned long currentTime3 = millis();
   //Serial.println(senzor1.geDistance()); //funkcni
   //Serial.println(senzor2.geDistance()); //funkcni
   if (Serial.available() > 0) //funkci
@@ -120,7 +120,6 @@ void loop()
     {
       vlak = true;
       gate = true;
-      //tone(PIEZO, 131); //funguje, az moc dobre
       
     }
     else if (String("Volno") == comdata)
@@ -139,14 +138,16 @@ void loop()
   if(vlak) {
     ledsOk[0].setOff();
     ledsOk[1].setOff();
-    if(currentTime2 - previousTime2 >= 2000) { //funkcni
+    if(currentTime2 - previousTime2 >= 3000) { //funkcni
       barrierGate(leds1, leds2);
+      previousTime2 = currentTime2;
     }
     if(gate && currentTime - previousTime >= 10000) {
       //u klasickych prejezdu zavisi na rychlosti vlaku a smeru odkud jede, zavory se tedy v tomto projektu budou sklapet po 10s od spusteni signalizacniho znaceni
       myServo1.write(90);
       myServo2.write(90);
       gate = false;
+      previousTime = currentTime;
     }
   }
 }
@@ -155,10 +156,16 @@ void barrierGate(Led* led1, Led* led2) {
   led2[0].setOn();
   led1[1].setOff();
   led2[1].setOff();
-  delay(1000);
+  tone(PIEZO, 1900);
+  delay(400);
+  noTone(PIEZO);
+  delay(1100);
   led1[0].setOff();
   led2[0].setOff();
   led1[1].setOn();
   led2[1].setOn();
-  delay(1000);
+  tone(PIEZO, 1900);
+  delay(400);
+  noTone(PIEZO);
+  delay(1100);
 }
