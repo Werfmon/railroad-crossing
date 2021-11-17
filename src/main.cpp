@@ -79,6 +79,8 @@ bool vlak = false;
 bool gate = true;
 
 void barrierGate(Led* led1, Led* led2);
+void ledsToggle1(Led* led1, Led* led2);
+void ledsToggle2(Led* led1, Led* led2);
 
 void setup()
 {
@@ -120,19 +122,27 @@ void loop()
     {
       vlak = true;
       gate = true;
-      
     }
     else if (String("Volno") == comdata)
     {
+      myServo1.write(0);
+      myServo2.write(180);
+
+      ledsToggle2(leds1, leds2);
+      delay(1500);
+      ledsToggle1(leds1, leds2);
+      delay(1500);
+      ledsToggle2(leds1, leds2);
+      delay(1500);
+      ledsToggle1(leds1, leds2);
+      
       vlak = false;
-      // for (int i = 0; i < 2; i++)
-      // {
-      //   leds1[i].setOff();
-      //   leds2[i].setOff();
-      //   ledsOk[i].setOn();
-      // }
-      // myServo1.write(90);
-      // myServo2.write(90);
+
+      leds1[1].setOff();
+      leds2[1].setOff();
+      delay(1000);
+      ledsOk[0].setOn();
+      ledsOk[1].setOn();
     }
   }
   if(vlak) {
@@ -152,20 +162,26 @@ void loop()
   }
 }
 void barrierGate(Led* led1, Led* led2) {
-  led1[0].setOn();
-  led2[0].setOn();
-  led1[1].setOff();
-  led2[1].setOff();
+  delay(1100);
+  ledsToggle2(led1, led2);
   tone(PIEZO, 1900);
   delay(400);
   noTone(PIEZO);
   delay(1100);
+  ledsToggle1(led1, led2);
+  tone(PIEZO, 1900);
+  delay(400);
+  noTone(PIEZO);
+}
+void ledsToggle1(Led* led1, Led* led2) {
   led1[0].setOff();
   led2[0].setOff();
   led1[1].setOn();
   led2[1].setOn();
-  tone(PIEZO, 1900);
-  delay(400);
-  noTone(PIEZO);
-  delay(1100);
+}
+void ledsToggle2(Led* led1, Led* led2) {
+  led1[0].setOn();
+  led2[0].setOn();
+  led1[1].setOff();
+  led2[1].setOff();
 }
