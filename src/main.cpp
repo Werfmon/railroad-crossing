@@ -73,7 +73,6 @@ Led leds2[] = {Led(12), Led(13)};
 
 unsigned long previousTime = 0;
 unsigned long previousTime2 = 0;
-unsigned long previousTime3 = 0;
 unsigned long previousTime4 = 0;
 
 bool vlak = false;
@@ -112,10 +111,9 @@ void loop()
 {
   unsigned long currentTime = millis();
   unsigned long currentTime2 = millis();
-  unsigned long currentTime3 = millis();
   unsigned long currentTime4 = millis();
  
-  if (Serial.available() > 0) //funkci
+  if (Serial.available() > 0)
   {
     String comdata = "";
     comdata = Serial.readString();
@@ -149,7 +147,7 @@ void loop()
   if(vlak) {
     ledsOk[0].setOff();
     ledsOk[1].setOff();
-    if(currentTime2 - previousTime2 >= 3000) { //funkcni
+    if(currentTime2 - previousTime2 >= 3000) { 
       barrierGate(leds1, leds2);
       previousTime2 = currentTime2;
     }
