@@ -74,6 +74,7 @@ Led leds2[] = {Led(12), Led(13)};
 unsigned long previousTime = 0;
 unsigned long previousTime2 = 0;
 unsigned long previousTime3 = 0;
+unsigned long previousTime4 = 0;
 
 bool vlak = false;
 bool gate = true;
@@ -112,8 +113,8 @@ void loop()
   unsigned long currentTime = millis();
   unsigned long currentTime2 = millis();
   unsigned long currentTime3 = millis();
-  //Serial.println(senzor1.geDistance()); //funkcni
-  //Serial.println(senzor2.geDistance()); //funkcni
+  unsigned long currentTime4 = millis();
+ 
   if (Serial.available() > 0) //funkci
   {
     String comdata = "";
@@ -151,6 +152,12 @@ void loop()
     if(currentTime2 - previousTime2 >= 3000) { //funkcni
       barrierGate(leds1, leds2);
       previousTime2 = currentTime2;
+    }
+    if(currentTime4 - previousTime4 >= 10){
+      if(senzor1.geDistance() < 100 || senzor2.geDistance() < 100) {
+        Serial.println("Byl zaznamenan pohyb");
+      }
+      previousTime4 = currentTime4;
     }
     if(gate && currentTime - previousTime >= 10000) {
       //u klasickych prejezdu zavisi na rychlosti vlaku a smeru odkud jede, zavory se tedy v tomto projektu budou sklapet po 10s od spusteni signalizacniho znaceni
